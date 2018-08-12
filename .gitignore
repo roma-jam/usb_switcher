@@ -1,0 +1,5 @@
+firmware/build/lib_so.o
+firmware/.settings/
+firmware/build/
+firmware/Debug/
+firmware/output/

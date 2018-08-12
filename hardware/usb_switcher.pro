@@ -1,4 +1,4 @@
-update=22.07.2018 22:59:07
+update=12.08.2018 12:03:03
 version=1
 last_client=kicad
 [cvpcb]
@@ -49,15 +49,16 @@ version=1
 version=1
 LibDir=../../../Libs/Kicad
 [eeschema/libraries]
-LibName1=D:/Libs/Kicad/Connectors_kl
-LibName2=D:/Libs/Kicad/Interface_kl
-LibName3=D:/Libs/Kicad/modules
-LibName4=D:/Libs/Kicad/OpAmp_kl
-LibName5=D:/Libs/Kicad/pcb_details
-LibName6=D:/Libs/Kicad/power
-LibName7=D:/Libs/Kicad/Power_kl
-LibName8=D:/Libs/Kicad/Sensors
-LibName9=D:/Libs/Kicad/st_kl
-LibName10=D:/Libs/Kicad/Switches
-LibName11=D:/Libs/Kicad/Tittar_kl
-LibName12=D:/Libs/Kicad/Transistors_kl
+LibName1=usb_switcher-rescue
+LibName2=D:/Libs/Kicad/Connectors_kl
+LibName3=D:/Libs/Kicad/Interface_kl
+LibName4=D:/Libs/Kicad/modules
+LibName5=D:/Libs/Kicad/OpAmp_kl
+LibName6=D:/Libs/Kicad/pcb_details
+LibName7=D:/Libs/Kicad/power
+LibName8=D:/Libs/Kicad/Power_kl
+LibName9=D:/Libs/Kicad/Sensors
+LibName10=D:/Libs/Kicad/st_kl
+LibName11=D:/Libs/Kicad/Switches
+LibName12=D:/Libs/Kicad/Tittar_kl
+LibName13=D:/Libs/Kicad/Transistors_kl
