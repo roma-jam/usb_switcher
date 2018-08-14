@@ -12,7 +12,6 @@
 #pragma pack(push, 1)
 
 #define HID_INTERFACE_CLASS                                                             3
-
 #define HID_SUBCLASS_NO_SUBCLASS                                                        0
 #define HID_SUBCLASS_BOOT_INTERFACE                                                     1
 

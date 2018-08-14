@@ -26,7 +26,7 @@
 #define HID_Usage(x)                            0x09,x
 
 #define DFU_USAGE_PAGE                          0xFA1D  //!< Aladdin R.D. usage page
-#define DFU_USAGE                               0x02    //!< Control usage for top-level collection
+#define DFU_USAGE                               0x01    //!< Control usage for top-level collection
 #define DFU_USAGE_DATA_IN                       0x20    //!< Raw IN data report
 #define DFU_USAGE_DATA_OUT                      0x21    //!< Raw OUT data report
 

@@ -41,6 +41,7 @@ void app_usb_init(APP* app)
     usbd_register_const_descriptor(app->usbd, &__STRING_WLANGS, 0, 0x409);
     usbd_register_const_descriptor(app->usbd, &__STRING_MANUFACTURER, 1, 0x0409);
     usbd_register_const_descriptor(app->usbd, &__STRING_PRODUCT, 2, 0x0409);
+    usbd_register_const_descriptor(app->usbd, &__STRING_SERIAL, 3, 0x0409);
 
     //turn USB on
     ack(app->usbd, HAL_REQ(HAL_USBD, IPC_OPEN), USB_PORT_NUM, 0, 0);

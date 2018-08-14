@@ -30,7 +30,7 @@ const USB_DEVICE_DESCRIPTOR __DEVICE_DESCRIPTOR = {
     0x0100,                                                                   /*bcdDevice release*/
     1,                                                                        /*Index of manufacturer  string*/
     2,                                                                        /*Index of product string*/
-    0,                                                                        /*Index of serial number string*/
+    3,                                                                        /*Index of serial number string*/
     1                                                                         /*bNumConfigurations*/
 };
 
@@ -64,15 +64,15 @@ const CONFIGURATION __CONFIGURATION_DESCRIPTOR = {
         HID_INTERFACE_CLASS,                                                /*bInterfaceClass*/
         HID_SUBCLASS_NO_SUBCLASS,                                        /*bInterfaceSubClass*/
         HID_PROTOCOL_NONE,                                              /*bInterfaceProtocol*/
-        0x02                                                                   /*iInterface*/
+        0x00                                                                   /*iInterface*/
     },
     //U2F descriptor
     {
         sizeof(HID_DESCRIPTOR),                                             /* Size of this descriptor in bytes */
         HID_DESCRIPTOR_TYPE,                                                /* HID descriptor type (assigned by USB) */
-        0x0111,                                                              /* HID Class Specification release number */
+        0x0100,                                                              /* HID Class Specification release number */
         HID_COUNTRY_NOT_SUPPORTED,                                          /* Hardware target country */
-        0x01,                                                               /* Number of HID class descriptors to follow */
+        0x00,                                                               /* Number of HID class descriptors to follow */
         HID_REPORT_DESCRIPTOR_TYPE,                                         /* Report descriptor type */
         HID_CONTROL_REPORT_SIZE                                               /* Total length of Report descriptor */
     },
@@ -81,7 +81,7 @@ const CONFIGURATION __CONFIGURATION_DESCRIPTOR = {
         { // IN
             sizeof(USB_ENDPOINT_DESCRIPTOR),                                       /*bLength*/
             USB_ENDPOINT_DESCRIPTOR_TYPE,                                      /*bDescriptorType*/
-            0x80 | 0x00,                                                         /*bEndpointAddress*/
+            0x80 | 0x01,                                                         /*bEndpointAddress*/
             USB_EP_BM_ATTRIBUTES_INTERRUPT,                                     /*bmAttributes*/
             64,                                                                 /*wMaxPacketSize*/
             0x01                                                                /*bInterval*/
@@ -89,7 +89,7 @@ const CONFIGURATION __CONFIGURATION_DESCRIPTOR = {
         { // OUT
             sizeof(USB_ENDPOINT_DESCRIPTOR),                                       /*bLength*/
             USB_ENDPOINT_DESCRIPTOR_TYPE,                                      /*bDescriptorType*/
-            0x00 | 0x00,                                                         /*bEndpointAddress*/
+            0x00 | 0x01,                                                         /*bEndpointAddress*/
             USB_EP_BM_ATTRIBUTES_INTERRUPT,                                     /*bmAttributes*/
             64,                                                                 /*wMaxPacketSize*/
             0x01                                                                 /*bInterval*/
@@ -133,6 +133,20 @@ const char __STRING_PRODUCT[] = {
     'a', 0,
     'y', 0
 };
+
+const char __STRING_SERIAL[] = {
+    8 * 2 + 2,                                                             /*bLength*/
+    USB_STRING_DESCRIPTOR_TYPE,                                             /*bDescriptorType*/
+    '0', 0,
+    '0', 0,
+    '0', 0,
+    '0', 0,
+    '0', 0,
+    '0', 0,
+    '0', 0,
+    '0', 0
+};
+
 
 #pragma pack(pop)
 

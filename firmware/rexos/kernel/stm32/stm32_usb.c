@@ -266,24 +266,18 @@ void stm32_usb_on_isr(int vector, void* param)
 
     if (sta & USB_ISTR_RESET)
     {
-        // TODO: remove me
-        printk("RST\n");
         stm32_usb_reset(exo);
         USB->ISTR &= ~USB_ISTR_RESET;
         return;
     }
     if ((sta & USB_ISTR_SUSP) && (USB->CNTR & USB_CNTR_SUSPM))
     {
-        // TODO: remove me
-        printk("SUP\n");
         stm32_usb_suspend(exo);
         USB->ISTR &= ~USB_ISTR_SUSP;
         return;
     }
     if (sta & USB_ISTR_WKUP)
     {
-        // TODO: remove me
-        printk("WUP\n");
         stm32_usb_wakeup(exo);
         USB->ISTR &= ~USB_ISTR_WKUP;
         return;
@@ -291,8 +285,6 @@ void stm32_usb_on_isr(int vector, void* param)
     //transfer complete. Check after status
     if (sta & USB_ISTR_CTR)
     {
-        // TODO: remove me
-        printk("CTRL\n");
         stm32_usb_ctr(exo);
         return;
     }
@@ -342,12 +334,12 @@ void stm32_usb_open_device(EXO* exo, HANDLE device)
 #if defined(STM32L0)
     SYSCFG->CFGR3 |= SYSCFG_CFGR3_EN_VREFINT;
     SYSCFG->CFGR3 |= SYSCFG_CFGR3_ENREF_HSI48;
-    printk("CFGR3: %#X\n",  SYSCFG->CFGR3);
 
     RCC->CRRCR |= RCC_CRRCR_HSI48ON;
     while ((RCC->CRRCR & RCC_CRRCR_HSI48RDY) == 0) {}
 
-    printk("HSI48CAL: %#X\n", RCC->CRRCR);
+    /* RC48 clock selected as HSI48 clock */
+    RCC->CCIPR |= RCC_CCIPR_HSI48SEL;
 
 #else // STM32L0
     RCC->CR2 |= RCC_CR2_HSI48ON;
@@ -400,9 +392,6 @@ void stm32_usb_open_device(EXO* exo, HANDLE device)
 #elif defined(STM32L1)
     SYSCFG->PMC |=  SYSCFG_PMC_USB_PU;
 #endif
-
-    // TODO: remove me
-    printk("usb open\n");
 }
 
 static inline void stm32_usb_open_ep(EXO* exo, unsigned int num, USB_EP_TYPE type, unsigned int size)
@@ -412,9 +401,6 @@ static inline void stm32_usb_open_ep(EXO* exo, unsigned int num, USB_EP_TYPE typ
         kerror(ERROR_ALREADY_CONFIGURED);
         return;
     }
-
-    // TODO: remove me
-    printk("open ep %X\n", num);
 
     //find free addr in FIFO
     unsigned int fifo, i;

@@ -55,6 +55,7 @@ void hidd_class_configured(USBD* usbd, USB_CONFIGURATION_DESCRIPTOR* cfg)
     uint8_t in_ep, in_ep_size, hid_u2f_iface;
     in_ep = in_ep_size = hid_u2f_iface = 0;
 
+    printf("Configure USB HID device\n");
     //check control/data ep here
     for (iface = usb_get_first_interface(cfg); iface != NULL; iface = usb_get_next_interface(cfg, iface))
     {
@@ -74,7 +75,10 @@ void hidd_class_configured(USBD* usbd, USB_CONFIGURATION_DESCRIPTOR* cfg)
 
     //No HID descriptors in interface
     if (in_ep == 0)
+    {
+        printf("1\n");
         return;
+    }
     HIDD* hidd = (HIDD*)malloc(sizeof(HIDD));
     if (hidd == NULL)
     {

@@ -17,6 +17,7 @@
 #include "mscd.h"
 #include "ccidd.h"
 #include "hidd.h"
+#include "../../../sys_config.h"
 
 typedef enum {
     USB_SETUP_STATE_REQUEST = 0,
@@ -441,6 +442,7 @@ static inline void usbd_class_configured(USBD* usbd)
     }
     for (i = 0; i < usbd->ifacecnt; ++i)
         IFACE(usbd, i)->usbd_class = &__USBD_STUB_CLASS;
+
     for (i = 0; i < USB_EP_COUNT_MAX; ++i)
         usbd->ep_iface[i] = USBD_INVALID_INTERFACE;
 
@@ -448,6 +450,7 @@ static inline void usbd_class_configured(USBD* usbd)
     for (i = 0; __USBD_CLASSES[i] != &__USBD_STUB_CLASS; ++i)
         __USBD_CLASSES[i]->usbd_class_configured(usbd, cfg);
 
+    printf("USBD: Configured\n"); // TODO: remove me
     usbd_inform(usbd, USBD_ALERT_CONFIGURED);
 }
 
@@ -1041,12 +1044,12 @@ static void usbd_setup_process(USBD* usbd)
 
 static inline void usbd_setup_received(USBD* usbd)
 {
-//#if (USBD_DEBUG_FLOW)
+#if (USBD_DEBUG_FLOW)
     printf("SETUP: ");
     for(uint8_t i = 0; i < 8; i ++)
         printf("%02X ", ((uint8_t*)(&usbd->setup))[i]);
     printf("\n");
-//#endif //USBD_DEBUG_FLOW
+#endif //USBD_DEBUG_FLOW
     //Back2Back setup received
     if (usbd->setup_state != USB_SETUP_STATE_REQUEST)
     {
