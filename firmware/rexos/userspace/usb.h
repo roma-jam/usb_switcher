@@ -30,10 +30,10 @@ typedef enum {
 }USB_IPCS;
 
 typedef enum {
-    USB_EP_CONTROL = 0,
-    USB_EP_ISOCHRON,
-    USB_EP_BULK,
-    USB_EP_INTERRUPT
+    USB_EP_TYPE_CONTROL = 0,
+    USB_EP_TYPE_ISOCHRON,
+    USB_EP_TYPE_BULK,
+    USB_EP_TYPE_INTERRUPT
 } USB_EP_TYPE;
 
 typedef enum {

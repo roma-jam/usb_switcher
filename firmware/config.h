@@ -14,13 +14,13 @@
 #define DEVICE_DATA_PIN2                            B8
 
 #define DEVICE_DEAFULT_DELAY_MS                     200
-#define DEVICE_TEST_TIMEOUT_MS                      5000
+#define DEVICE_TEST_TIMEOUT_MS                      300
 
 // =============================== LEDS ========================================
 #define LED_COUNT                                   4
 #define LED_RED_PIN                                 A1
 #define LED_BLUE_PIN                                A2
-#define LED_ORANGE_PIN                              A3
+#define LED_ORANGE_PIN                              A15
 
 #define LED_MAX_BRIGHT                              0xFF
 #define LED_BLINK_FREQ_HZ                           25

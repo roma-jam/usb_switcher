@@ -15,8 +15,8 @@
 typedef struct _APP {
     DEVICE device;
     HANDLE timer;
-//    HANDLE usbd;
-//    bool usb_started;
+    HANDLE usbd;
+    bool usb_started;
 } APP;
 
 #endif // APP_PRIVATE_H

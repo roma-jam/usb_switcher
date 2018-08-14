@@ -4,20 +4,21 @@
     All rights reserved.
 */
 
-#include "stm32_usb.h"
-#include "stm32_regsusb.h"
+#include <string.h>
+#include "../../userspace/stm32/stm32_driver.h"
 #include "../../userspace/sys.h"
 #include "../../userspace/usb.h"
+#include "../../userspace/stdio.h"
 #include "../kirq.h"
 #include "../kipc.h"
 #include "../kerror.h"
-#include "../../userspace/stm32/stm32_driver.h"
-#include "stm32_power.h"
-#include <string.h>
-#include <stdint.h>
-#include "kstdlib.h"
-#include "../../userspace/stdio.h"
+#include "../kstdlib.h"
 #include "stm32_exo_private.h"
+#include "stm32_usb.h"
+#include "stm32_regsusb.h"
+#include "stm32_power.h"
+
+#include "../../CMSIS/Device/ST/STM32L0xx/Include/stm32l052xx.h"
 
 typedef struct {
     HANDLE process;
@@ -152,7 +153,6 @@ USB_SPEED stm32_usb_get_speed(EXO* exo)
 static inline void stm32_usb_reset(EXO* exo)
 {
     USB->CNTR |= USB_CNTR_SUSPM;
-
     //enable function
     USB->DADDR = USB_DADDR_EF;
 
@@ -266,18 +266,24 @@ void stm32_usb_on_isr(int vector, void* param)
 
     if (sta & USB_ISTR_RESET)
     {
+        // TODO: remove me
+        printk("RST\n");
         stm32_usb_reset(exo);
         USB->ISTR &= ~USB_ISTR_RESET;
         return;
     }
     if ((sta & USB_ISTR_SUSP) && (USB->CNTR & USB_CNTR_SUSPM))
     {
+        // TODO: remove me
+        printk("SUP\n");
         stm32_usb_suspend(exo);
         USB->ISTR &= ~USB_ISTR_SUSP;
         return;
     }
     if (sta & USB_ISTR_WKUP)
     {
+        // TODO: remove me
+        printk("WUP\n");
         stm32_usb_wakeup(exo);
         USB->ISTR &= ~USB_ISTR_WKUP;
         return;
@@ -285,6 +291,8 @@ void stm32_usb_on_isr(int vector, void* param)
     //transfer complete. Check after status
     if (sta & USB_ISTR_CTR)
     {
+        // TODO: remove me
+        printk("CTRL\n");
         stm32_usb_ctr(exo);
         return;
     }
@@ -325,13 +333,26 @@ void stm32_usb_open_device(EXO* exo, HANDLE device)
     //enable clock
     RCC->APB1ENR |= RCC_APB1ENR_USBEN;
 
-#if defined(STM32F0)
+
+#if defined(STM32F0) || defined(STM32L0)
 #if (HSE_VALUE)
     RCC->CFGR3 |= RCC_CFGR3_USBSW;
 #else
     //Turn USB HSI On (crystall less)
+#if defined(STM32L0)
+    SYSCFG->CFGR3 |= SYSCFG_CFGR3_EN_VREFINT;
+    SYSCFG->CFGR3 |= SYSCFG_CFGR3_ENREF_HSI48;
+    printk("CFGR3: %#X\n",  SYSCFG->CFGR3);
+
+    RCC->CRRCR |= RCC_CRRCR_HSI48ON;
+    while ((RCC->CRRCR & RCC_CRRCR_HSI48RDY) == 0) {}
+
+    printk("HSI48CAL: %#X\n", RCC->CRRCR);
+
+#else // STM32L0
     RCC->CR2 |= RCC_CR2_HSI48ON;
     while ((RCC->CR2 & RCC_CR2_HSI48RDY) == 0) {}
+#endif // STM32F0
     //setup CRS
     RCC->APB1ENR |= RCC_APB1ENR_CRSEN;
     CRS->CR |= CRS_CR_AUTOTRIMEN;
@@ -374,11 +395,14 @@ void stm32_usb_open_device(EXO* exo, HANDLE device)
 #endif
 
     // hardware pull up DP line
-#if defined (STM32F0)
+#if defined (STM32F0) || defined (STM32L0)
     USB->BCDR |= USB_BCDR_DPPU;
 #elif defined(STM32L1)
     SYSCFG->PMC |=  SYSCFG_PMC_USB_PU;
 #endif
+
+    // TODO: remove me
+    printk("usb open\n");
 }
 
 static inline void stm32_usb_open_ep(EXO* exo, unsigned int num, USB_EP_TYPE type, unsigned int size)
@@ -388,6 +412,9 @@ static inline void stm32_usb_open_ep(EXO* exo, unsigned int num, USB_EP_TYPE typ
         kerror(ERROR_ALREADY_CONFIGURED);
         return;
     }
+
+    // TODO: remove me
+    printk("open ep %X\n", num);
 
     //find free addr in FIFO
     unsigned int fifo, i;
@@ -417,16 +444,16 @@ static inline void stm32_usb_open_ep(EXO* exo, unsigned int num, USB_EP_TYPE typ
     //setup ep type
     switch (type)
     {
-    case USB_EP_CONTROL:
+    case USB_EP_TYPE_CONTROL:
         ctl |= 1 << 9;
         break;
-    case USB_EP_BULK:
+    case USB_EP_TYPE_BULK:
         ctl |= 0 << 9;
         break;
-    case USB_EP_INTERRUPT:
+    case USB_EP_TYPE_INTERRUPT:
         ctl |= 3 << 9;
         break;
-    case USB_EP_ISOCHRON:
+    case USB_EP_TYPE_ISOCHRON:
         ctl |= 2 << 9;
         break;
     }
@@ -473,7 +500,7 @@ static inline void stm32_usb_close_ep(EXO* exo, unsigned int num)
 static inline void stm32_usb_close_device(EXO* exo)
 {
     // hardware pull down DP line
-#if defined(STM32F0)
+#if defined(STM32F0) || defined (STM32L0)
     USB->BCDR &= ~USB_BCDR_DPPU;
 #elif defined(STM32L1)
     SYSCFG->PMC &= ~SYSCFG_PMC_USB_PU;

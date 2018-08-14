@@ -4,18 +4,19 @@
     All rights reserved.
 */
 
-#include "usbd.h"
+#include <string.h>
 #include "../../userspace/core/core.h"
 #include "../../userspace/sys.h"
 #include "../../userspace/stdio.h"
 #include "../../userspace/stdlib.h"
-#include <string.h>
 #include "../../userspace/array.h"
+#include "usbd.h"
 #include "cdc_acmd.h"
 #include "rndisd.h"
 #include "hidd_kbd.h"
 #include "mscd.h"
 #include "ccidd.h"
+#include "hidd.h"
 
 typedef enum {
     USB_SETUP_STATE_REQUEST = 0,
@@ -111,6 +112,9 @@ static const USBD_CLASS* __USBD_CLASSES[] =         {
 #if (USBD_CCID_CLASS)
                                                         &__CCIDD_CLASS,
 #endif //USBD_CCID_CLASS
+#if (USBD_HID_CLASS)
+                                                        &__HIDD_CLASS,
+#endif // USBD_HID_CLASS
                                                         &__USBD_STUB_CLASS
                                                     };
 
@@ -545,8 +549,8 @@ static inline void usbd_reset(USBD* usbd, USB_SPEED speed)
     usbd->speed = speed;
     usbd->ep0_size = usbd->speed == USB_LOW_SPEED ? 8 : 64;
 
-    usbd_usb_ep_open(usbd, 0, USB_EP_CONTROL, usbd->ep0_size);
-    usbd_usb_ep_open(usbd, USB_EP_IN | 0, USB_EP_CONTROL, usbd->ep0_size);
+    usbd_usb_ep_open(usbd, 0, USB_EP_TYPE_CONTROL, usbd->ep0_size);
+    usbd_usb_ep_open(usbd, USB_EP_IN | 0, USB_EP_TYPE_CONTROL, usbd->ep0_size);
 
     usbd->setup_state = USB_SETUP_STATE_REQUEST;
     usbd->suspended = false;
@@ -577,8 +581,8 @@ static inline void usbd_wakeup(USBD* usbd)
 #if (USBD_DEBUG_REQUESTS)
         printf("USB device wakeup\n");
 #endif
-        usbd_usb_ep_open(usbd, 0, USB_EP_CONTROL, usbd->ep0_size);
-        usbd_usb_ep_open(usbd, USB_EP_IN | 0, USB_EP_CONTROL, usbd->ep0_size);
+        usbd_usb_ep_open(usbd, 0, USB_EP_TYPE_CONTROL, usbd->ep0_size);
+        usbd_usb_ep_open(usbd, USB_EP_IN | 0, USB_EP_TYPE_CONTROL, usbd->ep0_size);
 
         usbd_class_resume(usbd);
         usbd->suspended = false;
@@ -1037,6 +1041,12 @@ static void usbd_setup_process(USBD* usbd)
 
 static inline void usbd_setup_received(USBD* usbd)
 {
+//#if (USBD_DEBUG_FLOW)
+    printf("SETUP: ");
+    for(uint8_t i = 0; i < 8; i ++)
+        printf("%02X ", ((uint8_t*)(&usbd->setup))[i]);
+    printf("\n");
+//#endif //USBD_DEBUG_FLOW
     //Back2Back setup received
     if (usbd->setup_state != USB_SETUP_STATE_REQUEST)
     {

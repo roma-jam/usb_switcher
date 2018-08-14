@@ -555,6 +555,14 @@ static void stm32_power_set_clock_source(STM32_CLOCK_SOURCE_TYPE src)
     FLASH->ACR = FLASH_ACR_PRFTEN | FLASH_ACR_ICEN | FLASH_ACR_DCEN | ((core_clock - 1) / 30000000);
 #elif defined(STM32L0)
     FLASH->ACR = FLASH_ACR_PRE_READ | ((core_clock - 1) / 16000000);
+
+    if(core_clock > 2000000)
+    {
+        FLASH->ACR |= FLASH_ACR_LATENCY;
+    }
+    else
+        FLASH->ACR &= ~FLASH_ACR_LATENCY;
+
 #elif defined(STM32L1)
     FLASH->ACR |= FLASH_ACR_ACC64;
     FLASH->ACR |= FLASH_ACR_PRFTEN;

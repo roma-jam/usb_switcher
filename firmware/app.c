@@ -12,15 +12,13 @@
 #include "rexos/userspace/ipc.h"
 #include "rexos/userspace/uart.h"
 #include "rexos/userspace/process.h"
-#include "rexos/userspace/power.h"
 #include "rexos/userspace/pin.h"
 #include "rexos/userspace/gpio.h"
-#include "rexos/userspace/irq.h"
-#include "rexos/userspace/ccid.h"
-#include "rexos/userspace/spi.h"
 #include "app_private.h"
-#include "config.h"
+#include "app_usb.h"
 #include "device.h"
+#include "config.h"
+#include "led.h"
 
 void app();
 
@@ -68,16 +66,14 @@ void app()
 
     app_init(&app);
     device_init(&app);
-    //app_usb_init(&app);
-
-    gpio_enable_pin(A15, GPIO_MODE_OUT);
-    gpio_set_pin(A15);
+    led_init(&app);
+    app_usb_init(&app);
 
     sleep_ms(100);
     process_info();
 
    app.timer = timer_create(0, HAL_APP);
-   timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
+//   timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
 
     for (;;)
     {
@@ -87,8 +83,8 @@ void app()
         case HAL_APP:
             if(HAL_ITEM(ipc.cmd) == IPC_TIMEOUT)
             {
-                timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
                 device_set_state(&app, (app.device.state == DEVICE_STATE_OFF)? DEVICE_STATE_ON : DEVICE_STATE_OFF);
+                timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
             }
             break;
         case HAL_USBD:

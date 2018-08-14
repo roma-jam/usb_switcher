@@ -601,7 +601,8 @@ typedef struct {
     uint8_t keys[6];
 } BOOT_KEYBOARD;
 
-#define HID_BOOT_KEYBOARD_REPORT_SIZE                                                   0x3f
+#define HID_BOOT_KEYBOARD_REPORT_SIZE                                           0x3f
+#define HID_CONTROL_REPORT_SIZE                                                 0x22
 
 typedef enum {
     //reserved for system use
@@ -614,7 +615,11 @@ typedef enum {
     USB_HID_KBD_MAX
 } USB_HID_KBD_REQUESTS;
 
-
+typedef enum {
+    //reserved for system use
+    USB_HID_OUT = IPC_USER,
+    USB_HID_IN,
+} USB_HID_U2F_REQUESTS;
 #pragma pack(pop)
 
 #endif // HID_H
