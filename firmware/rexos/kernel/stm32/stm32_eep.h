@@ -10,6 +10,6 @@
 #include "stm32_exo.h"
 
 void stm32_eep_init(EXO* exo);
-bool stm32_eep_request(EXO* exo, IPC* ipc);
+void stm32_eep_request(EXO* exo, IPC* ipc);
 
 #endif // STM32_EEP_H

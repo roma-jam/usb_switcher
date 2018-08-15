@@ -33,13 +33,14 @@ static inline void app_hid_process_data(APP* app, IPC* ipc)
     printf("APP HID: Out\n");
 #endif // APP_DEBUG_HID
     IO* io = (IO*)ipc->param2;
-    DATA_HEADER* data_header = (DATA_HEADER*)io_data(io);
+    HID_DATA_HEADER* data_header = (HID_DATA_HEADER*)io_data(io);
+    HID_CONFIG_DATA* config_data = io_data(io) + sizeof(HID_DATA_HEADER);
 
     switch (data_header->cmd_id)
     {
         case HID_CMD_GET_INFO:
             data_header->param1 = sizeof(DEVICE);
-            memcpy((uint8_t*)(io_data(io) + sizeof(DATA_HEADER)),
+            memcpy((uint8_t*)(io_data(io) + sizeof(HID_DATA_HEADER)),
                     (uint8_t*)&app->device,
                     sizeof(DEVICE));
             /* TODO: */
@@ -51,9 +52,7 @@ static inline void app_hid_process_data(APP* app, IPC* ipc)
                 device_set_state(app, DEVICE_STATE_OFF);
             break;
         case HID_CMD_SET_CONFIG:
-            device_set_config(app,
-                    (bool)(io_data(io) + sizeof(DATA_HEADER)),
-                    (unsigned int)(io_data(io) + sizeof(DATA_HEADER) + sizeof(bool)));
+            device_set_config(app, config_data->flag, config_data->delay_ms, config_data->timeout_ms);
             break;
         default:
             break;

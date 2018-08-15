@@ -70,11 +70,9 @@ void app()
     led_init(&app);
     app_usb_init(&app);
 
-    sleep_ms(100);
-    process_info();
-
-   app.timer = timer_create(0, HAL_APP);
-//   timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
+    app.timer = timer_create(0, HAL_APP);
+    if(app.device.standalone_flag)
+        timer_start_ms(app.timer, app.device.timeout_ms);
 
     for (;;)
     {
@@ -85,7 +83,8 @@ void app()
             if(HAL_ITEM(ipc.cmd) == IPC_TIMEOUT)
             {
                 device_set_state(&app, (app.device.state == DEVICE_STATE_OFF)? DEVICE_STATE_ON : DEVICE_STATE_OFF);
-                timer_start_ms(app.timer, DEVICE_TEST_TIMEOUT_MS);
+                if(app.device.standalone_flag)
+                    timer_start_ms(app.timer, app.device.timeout_ms);
             }
             break;
         case HAL_USBD:

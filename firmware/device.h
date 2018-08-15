@@ -10,7 +10,8 @@
 
 #include "app.h"
 
-#define DEVICE_MAGIC            0x2DF4937A
+#define DEVICE_MAGIC            0x2DF49332
+#define DEVICE_CONFIG_ADDR      0
 
 typedef enum {
     DEVICE_STATE_UNAWARE = 0,
@@ -23,6 +24,7 @@ typedef struct {
     uint32_t magic;
     bool standalone_flag;
     DEVICE_STATE state;
+    uint32_t delay_ms;
     uint32_t timeout_ms;
     uint32_t switch_counter;
     uint32_t crc32;
@@ -30,7 +32,7 @@ typedef struct {
 #pragma pack(pop)
 
 void device_init(APP* app);
-void device_set_config(APP* app, bool standalone_flag, unsigned int timeout);
+void device_set_config(APP* app, bool standalone_flag, unsigned int delay_ms, unsigned int timeout);
 void device_set_state(APP* app, DEVICE_STATE new_state);
 
 

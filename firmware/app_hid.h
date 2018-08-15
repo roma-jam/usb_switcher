@@ -23,7 +23,14 @@ typedef enum {
 typedef struct {
     uint8_t cmd_id;
     uint8_t param1;
-} DATA_HEADER;
+} HID_DATA_HEADER;
+
+typedef struct {
+    bool flag;
+    uint32_t delay_ms;
+    uint32_t timeout_ms;
+} HID_CONFIG_DATA;
+
 #pragma pack(pop)
 
 void app_hid_request(APP* app, IPC* ipc);

@@ -83,7 +83,7 @@
 
 //------------------------------ HIDD class -------------------------------------------
 #define USBD_HID_DEBUG_ERRORS                               1
-#define USBD_HID_DEBUG_REQUESTS                             1
+#define USBD_HID_DEBUG_REQUESTS                             0
 #define USBD_HID_DEBUG_IO                                   0
 
 //----------------------------- CCIDD class -------------------------------------------

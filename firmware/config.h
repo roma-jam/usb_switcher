@@ -62,5 +62,6 @@
 
 #define APP_DEBUG_USB                               0
 #define APP_DEBUG_HID                               0
+#define APP_DEBUG_DEVICE                            1
 
 #endif // CONFIG_H
