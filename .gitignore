@@ -3,3 +3,5 @@ firmware/.settings/
 firmware/build/
 firmware/Debug/
 firmware/output/
+software/build-USB_Relay-Desktop_Qt_4_8_6_x86-Debug/
+software/build-USB_Relay-qt_4_8_6_static-Release/
