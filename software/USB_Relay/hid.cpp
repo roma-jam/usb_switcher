@@ -22,6 +22,10 @@ const unsigned char __SET_STATE[2] = {
     0x02, 0x00
 };
 
+const unsigned char __SET_CONFIG[2] = {
+    0x03, 0x00
+};
+
 int get_tick_ms()
 {
     return (int)GetTickCount();
@@ -411,6 +415,21 @@ int hid_t::set_state(bool active)
 
     if(active)
         report[1] = 0x01;
+
+    hid_tx((void*)report, REPORT_SIZE, 100);
+    return hid_rx((void*)report, REPORT_SIZE, 1000);
+}
+
+int hid_t::set_config(bool flag, unsigned int delay, unsigned int timeout)
+{
+    unsigned char report[REPORT_SIZE] = {0};
+    if(!this->opened)
+        return 0;
+
+    memcpy(report, __SET_CONFIG, sizeof(__SET_CONFIG));
+    report[2] = flag;
+    *((unsigned int*)(report + 3)) = delay;
+    *((unsigned int*)(report + 7)) = timeout;
 
     hid_tx((void*)report, REPORT_SIZE, 100);
     return hid_rx((void*)report, REPORT_SIZE, 1000);

@@ -23,6 +23,7 @@ typedef struct {
     uint32_t magic;
     bool standalone_flag;
     uint8_t state;
+    uint32_t delay_ms;
     uint32_t timeout_ms;
     uint32_t switch_counter;
     uint32_t crc32;

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMenu>
 #include <QTreeWidgetItem>
+#include <QMessageBox>
 #include "hid.h"
 namespace Ui {
 class hid_tree;
@@ -19,10 +20,11 @@ public:
     explicit hid_tree(QWidget *parent = 0);
     ~hid_tree();
 
+    void popup_window(const char* Title, const char* Text);
     void search_devices();
     void on();
     void off();
-    void set_config();
+    void set_config(bool standalone_flag, unsigned int delay_ms, unsigned int timeout_ms);
 
 private slots:
     void on_treeWidget_customContextMenuRequested(const QPoint &pos);

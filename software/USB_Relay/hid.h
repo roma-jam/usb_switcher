@@ -64,6 +64,7 @@ public:
     int open(unsigned int vid, unsigned int pid);
     int close();
     int set_state(bool active);
+    int set_config(bool flag, unsigned int delay, unsigned int timeout);
     int get_info(DEVICE* device);
     bool is_open() { return this->opened; }
 };

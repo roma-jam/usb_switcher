@@ -4,5 +4,6 @@
         <file>resources/refresh.png</file>
         <file>resources/relay.png</file>
         <file>resources/download.png</file>
+        <file>resources/autonimic.png</file>
     </qresource>
 </RCC>

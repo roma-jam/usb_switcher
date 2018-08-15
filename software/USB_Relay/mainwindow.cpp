@@ -26,7 +26,21 @@ MainWindow::~MainWindow()
 void MainWindow::update_config(DEVICE* dev)
 {
     ui->checkBox_STANDALONE->setChecked(dev->standalone_flag);
-    ui->lineEdit_STATE->setText(QString::number(dev->state, 10));
+
+    switch(dev->state)
+    {
+        case DEVICE_STATE_UNAWARE:
+            ui->lineEdit_STATE->setText("UNAWARE");
+            break;
+        case DEVICE_STATE_OFF:
+            ui->lineEdit_STATE->setText("OFF");
+            break;
+        case DEVICE_STATE_ON:
+            ui->lineEdit_STATE->setText("ON");
+        break;
+    }
+
+    ui->lineEdit_DELAY_MS->setText(QString::number(dev->delay_ms, 10));
     ui->lineEdit_TIME_MS->setText(QString::number(dev->timeout_ms, 10));
     ui->lineEdit_COUNTER->setText(QString::number(dev->switch_counter, 10));
 }
@@ -43,5 +57,16 @@ void MainWindow::on_pushButton_OFF_clicked()
 
 void MainWindow::on_pushButton_SET_CONFIG_clicked()
 {
-    HIDTree->set_config();
+    bool no_error = false;
+    bool standalone_flag = ui->checkBox_STANDALONE->isChecked();
+    unsigned int delay_ms = ui->lineEdit_DELAY_MS->text().toUInt(&no_error, 10);
+    unsigned int timeout_ms = ui->lineEdit_TIME_MS->text().toUInt(&no_error, 10);
+
+    if(!no_error)
+    {
+        QMessageBox::critical(this, "ERROR", "Wrong parametres.");
+        return;
+    }
+
+    HIDTree->set_config(standalone_flag, delay_ms, timeout_ms);
 }

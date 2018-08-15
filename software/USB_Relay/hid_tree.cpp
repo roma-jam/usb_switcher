@@ -21,6 +21,11 @@ hid_tree::~hid_tree()
     delete ui;
 }
 
+void hid_tree::popup_window(const char* Title, const char* Text)
+{
+    QMessageBox::critical(this, Title, Text);
+}
+
 void hid_tree::flush_tree()
 {
     while(device_cnt)
@@ -37,25 +42,61 @@ void hid_tree::search_devices()
 void hid_tree::on()
 {
     if(!HID->is_open())
+    {
+        popup_window("ERROR", "No device selected.");
         return;
+    }
 
-    HID->set_state(true);
+    if(!HID->set_state(true))
+    {
+        popup_window("ERROR", "Communication failed.");
+        return;
+    }
+
     if(HID->get_info(&device_config))
         emit update_config(&device_config);
+    else
+        popup_window("ERROR", "Get state failed.");
 }
 
 void hid_tree::off()
 {
-    if(!HID->is_open());
+    if(!HID->is_open())
+    {
+        popup_window("ERROR", "No device selected.");
+        return;
+    }
 
-    HID->set_state(false);
+    if(!HID->set_state(false))
+    {
+        popup_window("ERROR", "Communication failed.");
+        return;
+    }
+
     if(HID->get_info(&device_config))
         emit update_config(&device_config);
+    else
+        popup_window("ERROR", "Get state failed.");
 }
 
-void hid_tree::set_config()
+void hid_tree::set_config(bool standalone_flag, unsigned int delay_ms, unsigned int timeout_ms)
 {
+    if(!HID->is_open())
+    {
+        popup_window("ERROR", "No device selected.");
+        return;
+    }
 
+    if(!HID->set_config(standalone_flag, delay_ms, timeout_ms))
+    {
+        popup_window("ERROR", "Communication failed.");
+        return;
+    }
+
+    if(HID->get_info(&device_config))
+        emit update_config(&device_config);
+    else
+        popup_window("ERROR", "Get state failed.");
 }
 
 void hid_tree::device_founded(QString vid, QString pid, QString name)
