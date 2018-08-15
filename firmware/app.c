@@ -72,7 +72,11 @@ void app()
 
     app.timer = timer_create(0, HAL_APP);
     if(app.device.standalone_flag)
+    {
+        /* switch device on */
+        device_set_state(&app, DEVICE_STATE_ON);
         timer_start_ms(app.timer, app.device.timeout_ms);
+    }
 
     for (;;)
     {
@@ -82,6 +86,9 @@ void app()
         case HAL_APP:
             if(HAL_ITEM(ipc.cmd) == IPC_TIMEOUT)
             {
+                /* toggle twice */
+                device_set_state(&app, (app.device.state == DEVICE_STATE_OFF)? DEVICE_STATE_ON : DEVICE_STATE_OFF);
+                sleep_ms(app.device.delay_ms);
                 device_set_state(&app, (app.device.state == DEVICE_STATE_OFF)? DEVICE_STATE_ON : DEVICE_STATE_OFF);
                 if(app.device.standalone_flag)
                     timer_start_ms(app.timer, app.device.timeout_ms);

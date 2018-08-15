@@ -94,7 +94,10 @@ void hid_tree::set_config(bool standalone_flag, unsigned int delay_ms, unsigned 
     }
 
     if(HID->get_info(&device_config))
+    {
+        QMessageBox::information(this, "CONFIG", "Configuration has been saved.");
         emit update_config(&device_config);
+    }
     else
         popup_window("ERROR", "Get state failed.");
 }

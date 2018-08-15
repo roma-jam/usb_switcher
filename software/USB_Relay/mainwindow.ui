@@ -312,7 +312,7 @@ QComboBox {
              <item>
               <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>Autonomius switching</string>
+                <string>Autonomous switching</string>
                </property>
               </widget>
              </item>
