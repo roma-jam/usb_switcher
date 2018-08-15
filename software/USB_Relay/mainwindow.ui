@@ -552,7 +552,7 @@ QComboBox {
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Switched counter</string>
+                <string>Switching counter</string>
                </property>
               </widget>
              </item>
