@@ -44,6 +44,7 @@
 
 // ============================== CCID  ========================================
 #define USB_CCID_INTERFACE                          0
+#define USB_HID_INTERFACE                           0
 
 // =============================== COMM ========================================
 #define COMM_COMMAND_END                            0x0D
@@ -59,8 +60,7 @@
 #define APP_DEBUG                                   1
 #define APP_DEBUG_ERRORS                            1
 
-#define APP_DEBUG_USB                               1
-#define APP_DEBUG_CCID                              1
-#define APP_DEBUG_NFC                               1
+#define APP_DEBUG_USB                               0
+#define APP_DEBUG_HID                               0
 
 #endif // CONFIG_H

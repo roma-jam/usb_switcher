@@ -47,12 +47,13 @@
 //all other device-related debug depends on this
 #define USBD_DEBUG                                          1
 #define USBD_DEBUG_ERRORS                                   1
-#define USBD_DEBUG_REQUESTS                                 1
+#define USBD_DEBUG_REQUESTS                                 0
 //enable only for USB driver development
 #define USBD_DEBUG_FLOW                                     0
 
 //vendor-specific requests support
 #define USBD_VSR                                            0
+#define USBD_SUP_WUP_ENABLE                                 1
 
 #define USBD_IO_SIZE                                        128
 

@@ -16,6 +16,7 @@
 #include "rexos/userspace/gpio.h"
 #include "app_private.h"
 #include "app_usb.h"
+#include "app_hid.h"
 #include "device.h"
 #include "config.h"
 #include "led.h"
@@ -88,12 +89,15 @@ void app()
             }
             break;
         case HAL_USBD:
-//            app_usb_request(&app, &ipc);
+            app_usb_request(&app, &ipc);
             break;
         case HAL_USBD_IFACE:
-//            app_ccid_request(&app, &ipc);
+            app_hid_request(&app, &ipc);
             break;
         default:
+#if (APP_DEBUG_ERRORS)
+            printf("APP: unhandled IPC group %X\n", HAL_GROUP(ipc.cmd));
+#endif // APP_DEBUG_ERRORS
             error(ERROR_NOT_SUPPORTED);
             break;
         }

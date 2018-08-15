@@ -10,19 +10,27 @@
 
 #include "app.h"
 
-typedef enum
-{
+#define DEVICE_MAGIC            0x2DF4937A
+
+typedef enum {
     DEVICE_STATE_UNAWARE = 0,
     DEVICE_STATE_OFF,
     DEVICE_STATE_ON
 } DEVICE_STATE;
 
+#pragma pack(push, 1)
 typedef struct {
+    uint32_t magic;
+    bool standalone_flag;
     DEVICE_STATE state;
-    unsigned int dm_dp_delay_ms;
+    uint32_t timeout_ms;
+    uint32_t switch_counter;
+    uint32_t crc32;
 } DEVICE;
+#pragma pack(pop)
 
 void device_init(APP* app);
+void device_set_config(APP* app, bool standalone_flag, unsigned int timeout);
 void device_set_state(APP* app, DEVICE_STATE new_state);
 
 

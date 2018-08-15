@@ -28,9 +28,9 @@ const USB_DEVICE_DESCRIPTOR __DEVICE_DESCRIPTOR = {
     0x24DC,                                                                   /*idVendor: temporary*/
     0x0FFE,                                                                   /*idProduct*/
     0x0100,                                                                   /*bcdDevice release*/
-    1,                                                                        /*Index of manufacturer  string*/
+    0,                                                                        /*Index of manufacturer string*/
     2,                                                                        /*Index of product string*/
-    3,                                                                        /*Index of serial number string*/
+    0,                                                                        /*Index of serial number string*/
     1                                                                         /*bNumConfigurations*/
 };
 
@@ -104,7 +104,7 @@ const char __STRING_WLANGS[] = {
 };
 
 const char __STRING_MANUFACTURER[] = {
-    12 * 2 + 2,                                                             /*bLength*/
+    10 * 2 + 2,                                                             /*bLength*/
     USB_STRING_DESCRIPTOR_TYPE,                                             /*bDescriptorType*/
     'A', 0,
     'l', 0,
@@ -115,9 +115,7 @@ const char __STRING_MANUFACTURER[] = {
     'n', 0,
     ' ', 0,
     'R', 0,
-    '.', 0,
     'D', 0,
-    ',', 0,
 };
 
 const char __STRING_PRODUCT[] = {
@@ -133,21 +131,6 @@ const char __STRING_PRODUCT[] = {
     'a', 0,
     'y', 0
 };
-
-const char __STRING_SERIAL[] = {
-    8 * 2 + 2,                                                             /*bLength*/
-    USB_STRING_DESCRIPTOR_TYPE,                                             /*bDescriptorType*/
-    '0', 0,
-    '0', 0,
-    '0', 0,
-    '0', 0,
-    '0', 0,
-    '0', 0,
-    '0', 0,
-    '0', 0
-};
-
-
 #pragma pack(pop)
 
 

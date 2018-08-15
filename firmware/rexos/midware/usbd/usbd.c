@@ -450,7 +450,6 @@ static inline void usbd_class_configured(USBD* usbd)
     for (i = 0; __USBD_CLASSES[i] != &__USBD_STUB_CLASS; ++i)
         __USBD_CLASSES[i]->usbd_class_configured(usbd, cfg);
 
-    printf("USBD: Configured\n"); // TODO: remove me
     usbd_inform(usbd, USBD_ALERT_CONFIGURED);
 }
 

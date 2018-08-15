@@ -55,7 +55,6 @@ void hidd_class_configured(USBD* usbd, USB_CONFIGURATION_DESCRIPTOR* cfg)
     uint8_t in_ep, in_ep_size, hid_u2f_iface;
     in_ep = in_ep_size = hid_u2f_iface = 0;
 
-    printf("Configure USB HID device\n");
     //check control/data ep here
     for (iface = usb_get_first_interface(cfg); iface != NULL; iface = usb_get_next_interface(cfg, iface))
     {
@@ -131,10 +130,10 @@ void hidd_class_suspend(USBD* usbd, void* param)
 #if (USBD_HID_DEBUG_REQUESTS)
     printf("HIDD: suspend\n");
 #endif // USBD_HID_DEBUG_REQUESTS
-    HIDD* hidd = (HIDD*)param;
-    usbd_usb_ep_flush(usbd, hidd->data_ep);
-    usbd_usb_ep_flush(usbd, USB_EP_IN | hidd->data_ep);
-    hidd->suspended = true;
+//    HIDD* hidd = (HIDD*)param;
+//    usbd_usb_ep_flush(usbd, hidd->data_ep);
+//    usbd_usb_ep_flush(usbd, USB_EP_IN | hidd->data_ep);
+//    hidd->suspended = true;
 }
 
 void hidd_class_resume(USBD* usbd, void* param)
@@ -142,10 +141,10 @@ void hidd_class_resume(USBD* usbd, void* param)
 #if (USBD_HID_DEBUG_REQUESTS)
     printf("HIDD: resume\n");
 #endif // USBD_HID_DEBUG_REQUESTS
-    HIDD* hidd = (HIDD*)param;
-    hidd->suspended = false;
-    io_reset(hidd->io);
-    usbd_usb_ep_read(usbd, hidd->data_ep, hidd->io, io_get_free(hidd->io));
+//    HIDD* hidd = (HIDD*)param;
+//    hidd->suspended = false;
+//    io_reset(hidd->io);
+//    usbd_usb_ep_read(usbd, hidd->data_ep, hidd->io, io_get_free(hidd->io));
 }
 
 static inline int hidd_get_descriptor(HIDD* hidd, unsigned int value, unsigned int index, IO* io)
@@ -264,17 +263,17 @@ int hidd_class_setup(USBD* usbd, void* param, SETUP* setup, IO* io)
     return res;
 }
 
-static inline bool hidd_driver_event(USBD* usbd, HIDD* hidd_u2f, IPC* ipc)
+static inline bool hidd_driver_event(USBD* usbd, HIDD* hidd, IPC* ipc)
 {
     bool need_post = false;
     IO* io = (IO*)ipc->param2;
     switch (HAL_ITEM(ipc->cmd))
     {
     case IPC_WRITE:
-        usbd_post_user(usbd, hidd_u2f->iface, 0, HAL_CMD(HAL_USBD_IFACE, USB_HID_IN), 0, 0);
+        usbd_post_user(usbd, hidd->iface, 0, HAL_CMD(HAL_USBD_IFACE, USB_HID_IN), 0, 0);
         break;
     case IPC_READ:
-        usbd_post_user(usbd, hidd_u2f->iface, 0, HAL_CMD(HAL_USBD_IFACE, USB_HID_OUT), (unsigned int)io, io->data_size);
+        usbd_post_user(usbd, hidd->iface, 0, HAL_CMD(HAL_USBD_IFACE, USB_HID_OUT), (unsigned int)io, io->data_size);
         break;
     default:
         error(ERROR_NOT_SUPPORTED);

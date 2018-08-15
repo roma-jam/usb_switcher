@@ -270,18 +270,20 @@ void stm32_usb_on_isr(int vector, void* param)
         USB->ISTR &= ~USB_ISTR_RESET;
         return;
     }
-    if ((sta & USB_ISTR_SUSP) && (USB->CNTR & USB_CNTR_SUSPM))
+#if (USBD_SUP_WUP_ENABLE)
+    if (sta & USB_ISTR_SUSP)
     {
-        stm32_usb_suspend(exo);
+//        stm32_usb_suspend(exo);
         USB->ISTR &= ~USB_ISTR_SUSP;
         return;
     }
     if (sta & USB_ISTR_WKUP)
     {
-        stm32_usb_wakeup(exo);
+//        stm32_usb_wakeup(exo);
         USB->ISTR &= ~USB_ISTR_WKUP;
         return;
     }
+#endif // USBD_SUP_WUP_ENABLE
     //transfer complete. Check after status
     if (sta & USB_ISTR_CTR)
     {
@@ -381,7 +383,10 @@ void stm32_usb_open_device(EXO* exo, HANDLE device)
     NVIC_SetPriority(USB_IRQn, 13);
 
     //Unmask common interrupts
-    USB->CNTR |= USB_CNTR_SUSPM | USB_CNTR_WKUPM | USB_CNTR_RESETM | USB_CNTR_CTRM;
+    USB->CNTR |= USB_CNTR_RESETM | USB_CNTR_CTRM;
+#if (USBD_SUP_WUP_ENABLE)
+    USB->CNTR |= USB_CNTR_SUSPM | USB_CNTR_WKUPM;
+#endif // USBD_SUP_WUP_ENABLE
 #if (USB_DEBUG_ERRORS)
     USB->CNTR |= USB_CNTR_PMAOVRM | USB_CNTR_ERRM;
 #endif
