@@ -68,5 +68,11 @@ void MainWindow::on_pushButton_SET_CONFIG_clicked()
         return;
     }
 
+    if(delay_ms > timeout_ms)
+    {
+        QMessageBox::critical(this, "ERROR", "Period should be greater than Delay DM/DP.");
+        return;
+    }
+
     HIDTree->set_config(standalone_flag, delay_ms, timeout_ms);
 }
