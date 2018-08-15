@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/main.png</file>
+        <file>resources/refresh.png</file>
+        <file>resources/relay.png</file>
+        <file>resources/download.png</file>
+    </qresource>
+</RCC>
