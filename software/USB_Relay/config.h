@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define TITLE                   "USB Relay v.0.0.1b"
+#define TITLE                   "USB Relay v.0.0.2b"
 
 #define VID                     0x24DC
 #define PID                     0x0FFE
