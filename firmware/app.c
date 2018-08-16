@@ -62,8 +62,6 @@ static inline void app_init(APP* app)
 #endif
 }
 
-#include "flash_update.h"
-
 void app()
 {
     APP app;
@@ -83,20 +81,6 @@ void app()
         device_set_state(&app, DEVICE_STATE_ON);
         timer_start_ms(app.timer, app.device.timeout_ms);
     }
-
-//    uint8_t tmp[128] = { 0 };
-//
-//    for(uint8_t i = 0; i < 100; i++)
-//        tmp[i] = i;
-//
-//    uint8_t ram[FLASH_UPD_SIZE] = { 0 };
-//    memcpy(ram, __FLASH_UPD, FLASH_UPD_SIZE);
-//
-//    printf("Update firmware...\n");
-//    __disable_irq();
-//    flash_upd_sram(ram, 0x08008000, (unsigned int)tmp, 128);
-//    __enable_irq();
-//    printf("OK\n");
 
     for (;;)
     {
