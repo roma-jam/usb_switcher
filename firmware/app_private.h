@@ -11,12 +11,14 @@
 #include "rexos/userspace/types.h"
 #include "rexos/userspace/ipc.h"
 #include "device.h"
+#include "app_hid.h"
 
 typedef struct _APP {
     DEVICE device;
     HANDLE timer;
     HANDLE usbd;
     bool usb_started;
+    HID hid;
 } APP;
 
 #endif // APP_PRIVATE_H

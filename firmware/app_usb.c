@@ -45,6 +45,13 @@ void app_usb_init(APP* app)
     ack(app->usbd, HAL_REQ(HAL_USBD, IPC_OPEN), USB_PORT_NUM, 0, 0);
 }
 
+void app_usb_deinit(APP* app)
+{
+    //turn USB off
+    ack(app->usbd, HAL_REQ(HAL_USBD, IPC_CLOSE), USB_PORT_NUM, 0, 0);
+    app->usb_started = false;
+}
+
 static inline void app_usb_enable(APP* app)
 {
 #if (APP_DEBUG_USB)
