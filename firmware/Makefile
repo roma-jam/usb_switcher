@@ -1,5 +1,5 @@
 OPTIMIZATION            = s
-
+CURRENT_DATE			= $(shell date +"%D %T")
 #----------------------------------------------------------
 #PATH must be set to CodeSourcery/bin
 CROSS                      = arm-none-eabi-
@@ -60,11 +60,11 @@ SRC_C					   += usbd.c hidd.c
 #userspace lib
 SRC_C                      += ipc.c io.c process.c stdio.c stdlib.c systime.c time.c uart.c power.c stream.c pin.c htimer.c usb.c spi.c eep.c
 #app
-SRC_C                      += app.c device.c led.c app_usb.c app_hid.c crc.c
+SRC_C                      += app.c checksum.c device.c led.c app_usb.c app_hid.c crc.c
  
 OBJ                         = $(SRC_AS:%.S=%.o) $(SRC_C:%.c=%.o)
 #----------------------------------------------------------
-DEFINES                     = -D$(MCU)
+DEFINES                     = -D$(MCU) -D'__BUILD_TIME="$(CURRENT_DATE)"'
 MCU_FLAGS                   = -mcpu=cortex-m0 -mthumb -D__CORTEX_M0 -D__thumb2__=1 -mtune=cortex-m0 -msoft-float -mapcs-frame -std=gnu99
 NO_DEFAULTS                 = -fdata-sections -ffunction-sections -fno-hosted -fno-builtin  -nostdlib -nodefaultlibs
 FLAGS_CC                    = $(INCLUDES) $(DEFINES) -I. -O$(OPTIMIZATION) -Wall -c -fmessage-length=0 $(MCU_FLAGS) $(NO_DEFAULTS)
@@ -85,6 +85,7 @@ all: $(TARGET_NAME).elf
 	@$(NM) -n $(BUILD_DIR)/$(TARGET_NAME).elf > $(BUILD_DIR)/$(TARGET_NAME).sym
 	@mkdir -p $(OUTPUT_DIR)
 	@mv $(BUILD_DIR)/$(TARGET_NAME).bin $(OUTPUT_DIR)/$(TARGET_NAME).bin
+	@python checksum_calc.py $(OUTPUT_DIR)/$(TARGET_NAME).bin
 
 .c.o:
 	@-mkdir -p $(BUILD_DIR)

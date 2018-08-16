@@ -15,6 +15,7 @@
 #include "rexos/userspace/pin.h"
 #include "rexos/userspace/gpio.h"
 #include "app_private.h"
+#include "checksum.h"
 #include "app_usb.h"
 #include "app_hid.h"
 #include "device.h"
@@ -27,7 +28,7 @@ const REX __APP = {
     //name
     "App main",
     //size
-    900,
+    1200,
     //priority
     200,
     //flags
@@ -57,6 +58,7 @@ static inline void app_init(APP* app)
 #if (APP_DEBUG)
     app_setup_dbg();
     printf("USB Switcher, CPU %d MHz\n", power_get_core_clock()/1000000);
+    printf("%s\n", __BUILD_TIME);
 #endif
 }
 
@@ -66,6 +68,7 @@ void app()
     IPC ipc;
 
     app_init(&app);
+    checksum_init(&app);
     device_init(&app);
     led_init(&app);
     app_usb_init(&app);
