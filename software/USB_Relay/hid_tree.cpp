@@ -128,6 +128,8 @@ void hid_tree::on_treeWidget_customContextMenuRequested(const QPoint &pos)
     if (FirmwareUpdate == sel)
     {
         /* TODO */
+        FWUpdate = new fw_update_dialog(this, this->HID);
+        FWUpdate->exec();
     }
 }
 

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define TITLE                   "USB Relay v.0.0.2b"
+#define TITLE                   "USB Relay v.0.0.3b"
 
 #define VID                     0x24DC
 #define PID                     0x0FFE
@@ -11,6 +11,8 @@
 #define USAGE                   0x0002
 
 #define REPORT_SIZE             64
+
+#define WRITE_CHUNK_SIZE        55
 
 typedef enum {
     DEVICE_STATE_UNAWARE = 0,

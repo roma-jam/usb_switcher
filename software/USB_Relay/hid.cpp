@@ -14,17 +14,17 @@ static CRITICAL_SECTION rx_mutex;
 static CRITICAL_SECTION tx_mutex;
 
 
-const unsigned char __GET_INFO[2] = {
-    0x01, 0x00
-};
+typedef enum {
+    HID_CMD_RESERVED = 0x00,
+    HID_CMD_GET_INFO,
+    HID_CMD_SET_STATE,
+    HID_CMD_SET_CONFIG,
+    HID_CMD_START_UPDATE_FIRMWARE,
+    HID_CMD_UPDATE_FIRMWARE,
+    HID_CMD_LAUNCH_FIRMWARE,
+    HID_CMD_MAX
+} HID_CMD;
 
-const unsigned char __SET_STATE[2] = {
-    0x02, 0x00
-};
-
-const unsigned char __SET_CONFIG[2] = {
-    0x03, 0x00
-};
 
 int get_tick_ms()
 {
@@ -411,8 +411,7 @@ int hid_t::set_state(bool active)
     if(!this->opened)
         return 0;
 
-    memcpy(report, __SET_STATE, sizeof(__SET_STATE));
-
+    report[0] = HID_CMD_SET_STATE;
     if(active)
         report[1] = 0x01;
 
@@ -426,7 +425,7 @@ int hid_t::set_config(bool flag, unsigned int delay, unsigned int timeout)
     if(!this->opened)
         return 0;
 
-    memcpy(report, __SET_CONFIG, sizeof(__SET_CONFIG));
+    report[0] = HID_CMD_SET_CONFIG;
     report[2] = flag;
     *((unsigned int*)(report + 3)) = delay;
     *((unsigned int*)(report + 7)) = timeout;
@@ -441,7 +440,7 @@ int hid_t::get_info(DEVICE* device)
     if(!this->opened)
         return 0;
 
-    memcpy(report, __GET_INFO, sizeof(__GET_INFO));
+    report[0] = HID_CMD_GET_INFO;
 
     hid_tx((void*)report, REPORT_SIZE, 100);
     hid_rx((void*)report, REPORT_SIZE, 1000);
@@ -453,4 +452,45 @@ int hid_t::get_info(DEVICE* device)
     }
 
     return 0;
+}
+
+int hid_t::start_update(unsigned int size)
+{
+    unsigned char report[REPORT_SIZE] = {0};
+    if(!this->opened)
+        return 0;
+
+    report[0] = HID_CMD_START_UPDATE_FIRMWARE;
+    report[1] = sizeof(unsigned int);
+    *((uint32_t*)(report + 2)) = size;
+
+    hid_tx((void*)report, REPORT_SIZE, 100);
+    return hid_rx((void*)report, REPORT_SIZE, 1000);
+}
+
+int hid_t::proceed_update(uint8_t *data, unsigned int offset)
+{
+    unsigned char report[REPORT_SIZE] = {0};
+    if(!this->opened)
+        return 0;
+
+    report[0] = HID_CMD_UPDATE_FIRMWARE;
+    report[1] = WRITE_CHUNK_SIZE;
+    *((uint32_t*)(report + 2)) = offset;
+    memcpy(report + 6, data, WRITE_CHUNK_SIZE);
+
+    hid_tx((void*)report, REPORT_SIZE, 100);
+    return hid_rx((void*)report, REPORT_SIZE, 1000);
+}
+
+int hid_t::update_fw()
+{
+    unsigned char report[REPORT_SIZE] = {0};
+    if(!this->opened)
+        return 0;
+
+    report[0] = HID_CMD_LAUNCH_FIRMWARE;
+
+    hid_tx((void*)report, REPORT_SIZE, 100);
+    return hid_rx((void*)report, REPORT_SIZE, 1000);
 }

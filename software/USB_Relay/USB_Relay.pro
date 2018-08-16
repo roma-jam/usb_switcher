@@ -15,15 +15,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     hid.cpp \
-    hid_tree.cpp
+    hid_tree.cpp \
+    fw_update_dialog.cpp
 
 HEADERS  += mainwindow.h \
     config.h \
     hid.h \
-    hid_tree.h
+    hid_tree.h \
+    fw_update_dialog.h
 
 FORMS    += mainwindow.ui \
-    hid_tree.ui
+    hid_tree.ui \
+    fw_update_dialog.ui
 
 win32 {
     LIBS += -L$$PWD/lib_x32/

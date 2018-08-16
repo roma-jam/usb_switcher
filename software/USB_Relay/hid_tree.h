@@ -6,6 +6,8 @@
 #include <QTreeWidgetItem>
 #include <QMessageBox>
 #include "hid.h"
+#include "fw_update_dialog.h"
+
 namespace Ui {
 class hid_tree;
 }
@@ -39,7 +41,7 @@ private:
     hid_t* HID;
     int device_cnt;
     DEVICE device_config;
-
+    fw_update_dialog* FWUpdate;
     void flush_tree();
 
 };

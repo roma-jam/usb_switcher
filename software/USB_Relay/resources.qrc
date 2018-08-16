@@ -5,5 +5,7 @@
         <file>resources/relay.png</file>
         <file>resources/download.png</file>
         <file>resources/autonimic.png</file>
+        <file>resources/firmware.png</file>
+        <file>resources/trash.png</file>
     </qresource>
 </RCC>

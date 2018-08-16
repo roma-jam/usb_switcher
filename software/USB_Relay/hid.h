@@ -44,7 +44,6 @@ class hid_t : public QObject {
 signals:
 //    void log(LOG_TYPE type, const QString& text, const QColor& color);
     void device_founded(QString,QString,QString);
-
 protected:
 //    void info(const QString& text, const QColor& color = Qt::black) {log(LOG_TYPE_DEFAULT, text, color);}
 
@@ -66,6 +65,10 @@ public:
     int set_state(bool active);
     int set_config(bool flag, unsigned int delay, unsigned int timeout);
     int get_info(DEVICE* device);
+    int start_update(unsigned int size);
+    int proceed_update(uint8_t *data, unsigned int offset);
+    int update_fw();
+
     bool is_open() { return this->opened; }
 };
 
