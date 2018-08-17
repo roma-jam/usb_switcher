@@ -6,3 +6,12 @@ firmware/output/
 software/build-USB_Relay-Desktop_Qt_4_8_6_x86-Debug/
 software/build-USB_Relay-qt_4_8_6_static-Release/
 software/build-USB_Relay-Desktop_Qt_5_7_1_MSVC2013_32bit-Debug/
+software/USB_Relay_dll/usb_relay/Debug/
+software/USB_Relay_dll/usb_relay/Release/usb_relay.tlog/
+software/USB_Relay_dll_example/.vs/usb_relay_dll_example/v14/.suo
+software/USB_Relay_dll/usb_relay/Release/
+software/USB_Relay_dll_example/Debug/
+software/USB_Relay_dll_example/usb_relay_dll_example/Debug/
+software/USB_Relay_dll/Release/
+software/USB_Relay_dll/.vs/
+software/USB_Relay_dll/Debug/
