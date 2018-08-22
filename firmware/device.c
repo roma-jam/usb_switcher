@@ -48,17 +48,6 @@ void device_init(APP* app)
         eep_write(DEVICE_CONFIG_ADDR, (const void*)&app->device, sizeof(DEVICE));
         return;
     }
-
-    /* if sevice state is ON - turn it OFF */
-    if(app->device.state == DEVICE_STATE_ON)
-    {
-#if (APP_DEBUG_DEVICE)
-        printf("DEVICE: state is ON, power off\n");
-#endif // APP_DEBUG_DEVICE
-        device_set_state(app, DEVICE_STATE_OFF);
-        app->device.crc32 = crc32_no_table((const unsigned char*)&app->device, sizeof(DEVICE) - sizeof(uint32_t));
-        eep_write(DEVICE_CONFIG_ADDR, (const void*)&app->device, sizeof(DEVICE));
-    }
 }
 
 void device_set_config(APP* app, bool standalone_flag, unsigned int delay_ms, unsigned int timeout_ms)
