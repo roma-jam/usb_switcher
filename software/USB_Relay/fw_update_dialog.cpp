@@ -113,6 +113,7 @@ void fw_update_dialog::on_pushButton_UPDATE_clicked()
         file_size -= WRITE_CHUNK_SIZE;
 
         percent(100 - (((total - offset) * 100) / total));
+        qApp->processEvents();
     }
 
     /************************** REMAINING DATA *************************/
