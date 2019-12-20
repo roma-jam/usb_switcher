@@ -10,7 +10,7 @@
 
 #include "app.h"
 #include "rexos/userspace/ipc.h"
-#include "flash_update.h"
+#include "flash_update_STM32L052K8.h"
 
 #define FLASH_PAGE_SIZE                 128
 #define HID_MEMORY_WRITE_CHUNK_SZ       55
@@ -25,6 +25,7 @@ typedef enum {
     HID_CMD_START_UPDATE_FIRMWARE,
     HID_CMD_UPDATE_FIRMWARE,
     HID_CMD_LAUNCH_FIRMWARE,
+    HID_CMD_GET_FW_BUILD,
     HID_CMD_MAX
 } HID_CMD;
 

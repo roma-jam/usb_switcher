@@ -41,7 +41,7 @@ void device_init(APP* app)
         app->device.standalone_flag = false;
         app->device.state = DEVICE_STATE_UNAWARE;
         app->device.delay_ms = DEVICE_DEAFULT_DELAY_MS;
-        app->device.timeout_ms = 0;
+        app->device.timeout_ms = DEVICE_MIN_PERIOD_DELAY_MS;
         app->device.switch_counter = 0;
         device_set_state(app, DEVICE_STATE_OFF);
         app->device.crc32 = crc32_no_table((const unsigned char*)&app->device, sizeof(DEVICE) - sizeof(uint32_t));
@@ -52,6 +52,14 @@ void device_init(APP* app)
 
 void device_set_config(APP* app, bool standalone_flag, unsigned int delay_ms, unsigned int timeout_ms)
 {
+    app->device.standalone_flag = standalone_flag;
+
+    if((delay_ms >= 0) && (delay_ms < DEVICE_MIN_DM_DP_DELAY_MS))
+        delay_ms = DEVICE_MIN_DM_DP_DELAY_MS;
+
+    if((timeout_ms >= 0) && (timeout_ms < DEVICE_MIN_PERIOD_DELAY_MS))
+        timeout_ms = DEVICE_MIN_PERIOD_DELAY_MS;
+
 #if (APP_DEBUG_DEVICE)
     printf("DEVICE: set config\n");
     printf("flag: %X\n", standalone_flag);
@@ -59,7 +67,6 @@ void device_set_config(APP* app, bool standalone_flag, unsigned int delay_ms, un
     printf("timeout_ms: %d ms\n", timeout_ms);
 #endif // APP_DEBUG_DEVICE
     /* update EEPROM config */
-    app->device.standalone_flag = standalone_flag;
     app->device.delay_ms = delay_ms;
     app->device.timeout_ms = timeout_ms;
     app->device.crc32 = crc32_no_table((const unsigned char*)&app->device, sizeof(DEVICE) - sizeof(uint32_t));

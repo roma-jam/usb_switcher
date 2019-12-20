@@ -13,6 +13,9 @@
 #define DEVICE_DATA_PIN1                            B7
 #define DEVICE_DATA_PIN2                            B8
 
+#define DEVICE_MIN_DM_DP_DELAY_MS                   10
+#define DEVICE_MIN_PERIOD_DELAY_MS                  1000
+
 #define DEVICE_DEAFULT_DELAY_MS                     200
 #define DEVICE_TEST_TIMEOUT_MS                      300
 
@@ -62,6 +65,6 @@
 
 #define APP_DEBUG_USB                               0
 #define APP_DEBUG_HID                               0
-#define APP_DEBUG_DEVICE                            1
+#define APP_DEBUG_DEVICE                            0
 
 #endif // CONFIG_H

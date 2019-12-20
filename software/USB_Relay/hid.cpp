@@ -22,6 +22,7 @@ typedef enum {
     HID_CMD_START_UPDATE_FIRMWARE,
     HID_CMD_UPDATE_FIRMWARE,
     HID_CMD_LAUNCH_FIRMWARE,
+    HID_CMD_GET_FW_BUILD,
     HID_CMD_MAX
 } HID_CMD;
 
@@ -452,6 +453,21 @@ int hid_t::get_info(DEVICE* device)
     }
 
     return 0;
+}
+
+int hid_t::get_fw_build(char* fw_build)
+{
+    unsigned char report[REPORT_SIZE] = {0};
+    if(!this->opened)
+        return 0;
+
+    report[0] = HID_CMD_GET_FW_BUILD;
+
+    hid_tx((void*)report, REPORT_SIZE, 100);
+    hid_rx((void*)report, REPORT_SIZE, 1000);
+
+    memcpy(fw_build, &report[2], report[1]);
+    return report[1];
 }
 
 int hid_t::start_update(unsigned int size)

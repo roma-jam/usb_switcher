@@ -9,6 +9,8 @@ fw_update_dialog::fw_update_dialog(QWidget *parent, hid_t *hid) :
     ui->setupUi(this);
     this->setAcceptDrops(true);
     this->hid = hid;
+
+    get_current_fw_build();
 }
 
 fw_update_dialog::~fw_update_dialog()
@@ -56,7 +58,7 @@ void fw_update_dialog::drop_files_process()
 {
     QRegExp rx("\\/");
     QIcon icon(":/resources/firmware.png");
-    QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(50, 50)));
+    QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)));
     if(pathList.size() > 1)
     {
         /* Ask what exactly file user want to upload */
@@ -132,4 +134,11 @@ void fw_update_dialog::on_pushButton_UPDATE_clicked()
     hid->update_fw();
     fclose(file);
     QMessageBox::warning(this, "ATTENTION!", "Do not remove device until it has been restarted!");
+}
+
+void fw_update_dialog::get_current_fw_build()
+{
+    char fw_build[32] = { 0 };
+    hid->get_fw_build(fw_build);
+    ui->label_fw_build->setText(fw_build);
 }

@@ -97,7 +97,6 @@ static inline void app_hid_update_fw(APP* app, uint8_t* data)
     if(HID_FW_UPDATE_STATE_IN_PROCESS != app->hid.fw_state)
     {
         /* TODO: set error code */
-        printf("1\n");
         return;
     }
     offset = (data[3] << 24) | (data[2] << 16) | (data[1] << 8) | data[0];
@@ -105,14 +104,12 @@ static inline void app_hid_update_fw(APP* app, uint8_t* data)
     if(FLASH_FW_UPDATE_BANK + offset > FLASH_BASE + FLASH_SIZE)
     {
         /* TODO: set error code */
-        printf("2\n");
         return;
     }
 
     if(!app_hid_collect_data(app, (uint8_t*)(data + sizeof(uint32_t)), size))
     {
         /* TODO: set error code */
-        printf("3\n");
         return;
     }
 }
@@ -162,19 +159,19 @@ void app_hid_launch_firmware_update(APP *app)
 
 void app_hid_init(APP* app)
 {
-#if (APP_DEBUG_HID)
-    printf("APP HID: Init\n");
-#endif // APP_DEBUG_HID
     app->hid.fw_state = HID_FW_UPDATE_STATE_IDLE;
     app->hid.fw_ram_foo = malloc(FLASH_UPD_SIZE);
+
     if(app->hid.fw_ram_foo == NULL)
-    {
-        /* TODO */
-        printf("malloc error\n");
         return;
-    }
+
     memcpy(app->hid.fw_ram_foo, __FLASH_UPD, FLASH_UPD_SIZE);
     app->hid.timer = timer_create(0, HAL_USBD_IFACE);
+
+#if (APP_DEBUG_HID)
+    printf("APP HID: Init\n");
+    printf("flash memcpy %#X\n", app->hid.fw_ram_foo);
+#endif // APP_DEBUG_HID
 }
 
 static inline void app_hid_process_data(APP* app, IPC* ipc)
@@ -210,6 +207,10 @@ static inline void app_hid_process_data(APP* app, IPC* ipc)
             break;
         case HID_CMD_LAUNCH_FIRMWARE:
             app_hid_launch_firmware_update(app);
+            break;
+        case HID_CMD_GET_FW_BUILD:
+            data_header->param1 = strlen(__BUILD_TIME);
+            strcpy((char*)(io_data(io) + sizeof(HID_DATA_HEADER)), __BUILD_TIME);
             break;
         default:
             break;

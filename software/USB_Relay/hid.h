@@ -65,6 +65,7 @@ public:
     int set_state(bool active);
     int set_config(bool flag, unsigned int delay, unsigned int timeout);
     int get_info(DEVICE* device);
+    int get_fw_build(char* fw_build);
     int start_update(unsigned int size);
     int proceed_update(uint8_t *data, unsigned int offset);
     int update_fw();

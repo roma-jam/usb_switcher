@@ -61,7 +61,7 @@ SRC_C					   += usbd.c hidd.c
 SRC_C                      += ipc.c io.c process.c stdio.c stdlib.c systime.c time.c uart.c power.c stream.c pin.c htimer.c usb.c spi.c eep.c
 #app
 SRC_C                      += app.c checksum.c device.c led.c app_usb.c app_hid.c crc.c
-SRC_C						+= flash_update.c
+SRC_C						+= flash_update_STM32L052K8.c
  
 OBJ                         = $(SRC_AS:%.S=%.o) $(SRC_C:%.c=%.o)
 #----------------------------------------------------------

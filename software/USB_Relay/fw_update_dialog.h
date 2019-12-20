@@ -44,6 +44,7 @@ private:
     QString bin_path;
     hid_t* hid;
     void drop_files_process();
+    void get_current_fw_build();
 };
 
 #endif // FW_UPDATE_DIALOG_H
